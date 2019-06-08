@@ -1,8 +1,6 @@
 package com.example.completablefuture;
  
-
-import org.junit.Test;
-import static  org.junit.Assert.*;
+ 
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,8 +36,8 @@ public class CompletableFutureExamples {
 
     static void completedFutureExample() {
         CompletableFuture<String> cf = CompletableFuture.completedFuture("message");
-        assertTrue(cf.isDone());
-        assertEquals("message", cf.getNow(null));
+        System.out.println(cf.isDone());
+        System.out.println("message ="+ cf.getNow(null));
     }
 
     static void completeExceptionallyExample() {
@@ -47,62 +45,64 @@ public class CompletableFutureExamples {
                 CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS));
         CompletableFuture<String> exceptionHandler = cf.handle((s, th) -> { return (th != null) ? "message upon cancel" : ""; });
         cf.completeExceptionally(new RuntimeException("completed exceptionally"));
-        assertTrue("Was not completed exceptionally", cf.isCompletedExceptionally());
+        
+        System.out.println("Was not completed exceptionally="+ cf.isCompletedExceptionally());
+        
         try {
             cf.join();
-            fail("Should have thrown an exception");
+            System.out.println("Err Should have thrown an exception");
         } catch (CompletionException ex) { // just for testing
-            assertEquals("completed exceptionally", ex.getCause().getMessage());
+        	System.out.println("completed exceptionally = "+ ex.getCause().getMessage());
         }
 
-        assertEquals("message upon cancel", exceptionHandler.join());
+        System.out.println("message upon cancel= "+ exceptionHandler.join());
     }
 
     static void runAsyncExample() {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
-            assertTrue(Thread.currentThread().isDaemon());
+        	System.out.println(Thread.currentThread().isDaemon());
             randomSleep();
         });
-        assertFalse(cf.isDone());
+        System.out.println(cf.isDone());
         sleepEnough();
-        assertTrue(cf.isDone());
+        System.out.println(cf.isDone());
     }
 
     static void thenApplyExample() {
         CompletableFuture<String> cf = CompletableFuture.completedFuture("message").thenApply(s -> {
-            assertFalse(Thread.currentThread().isDaemon());
+        	System.out.println(Thread.currentThread().isDaemon());
             return s.toUpperCase();
         });
-        assertEquals("MESSAGE", cf.getNow(null));
+        System.out.println("MESSAGE= "+ cf.getNow(null));
     }
 
     static void thenApplyAsyncExample() {
         CompletableFuture<String> cf = CompletableFuture.completedFuture("message").thenApplyAsync(s -> {
-            assertTrue(Thread.currentThread().isDaemon());
+        	System.out.println(Thread.currentThread().isDaemon());
             randomSleep();
             return s.toUpperCase();
         });
-        assertNull(cf.getNow(null));
-        assertEquals("MESSAGE", cf.join());
+        System.out.println(cf.getNow(null));
+        System.out.println("MESSAGE"+ cf.join());
     }
 
     static void thenApplyAsyncWithExecutorExample() {
         CompletableFuture<String> cf = CompletableFuture.completedFuture("message").thenApplyAsync(s -> {
-            assertTrue(Thread.currentThread().getName().startsWith("custom-executor-"));
-            assertFalse(Thread.currentThread().isDaemon());
+        	System.out.println(Thread.currentThread().getName().startsWith("custom-executor-"));
+        	System.out.println(Thread.currentThread().isDaemon());
             randomSleep();
             return s.toUpperCase();
         }, executor);
 
-        assertNull(cf.getNow(null));
-        assertEquals("MESSAGE", cf.join());
+        System.out.println("null:"+cf.getNow(null));
+        System.out.println("MESSAGE"+ cf.join());
     }
 
     static void thenAcceptExample() {
         StringBuilder result = new StringBuilder();
         CompletableFuture.completedFuture("thenAccept message")
                 .thenAccept(s -> result.append(s));
-        assertTrue("Result was empty", result.length() > 0);
+        System.out.println("Result was empty"+ result.length() +"> 0");
     }
 
     static void thenAcceptAsyncExample() {
@@ -110,16 +110,16 @@ public class CompletableFutureExamples {
         CompletableFuture<Void> cf = CompletableFuture.completedFuture("thenAcceptAsync message")
                 .thenAcceptAsync(s -> result.append(s));
         cf.join();
-        assertTrue("Result was empty", result.length() > 0);
+        System.out.println("Result was empty"+ result.length() +"> 0");
     }
 
     static void cancelExample() {
         CompletableFuture<String> cf = CompletableFuture.completedFuture("message").thenApplyAsync(String::toUpperCase,
                 CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS));
         CompletableFuture<String> cf2 = cf.exceptionally(throwable -> "canceled message");
-        assertTrue("Was not canceled", cf.cancel(true));
-        assertTrue("Was not completed exceptionally", cf.isCompletedExceptionally());
-        assertEquals("canceled message", cf2.join());
+        System.out.println("Was not canceled"+ cf.cancel(true));
+        System.out.println("Was not completed exceptionally"+ cf.isCompletedExceptionally());
+        System.out.println("canceled message"+ cf2.join());
     }
 
     static void applyToEitherExample() {
@@ -129,7 +129,7 @@ public class CompletableFutureExamples {
         CompletableFuture<String> cf2 = cf1.applyToEither(
                 CompletableFuture.completedFuture(original).thenApplyAsync(s -> delayedLowerCase(s)),
                 s -> s + " from applyToEither");
-        assertTrue(cf2.join().endsWith(" from applyToEither"));
+        System.out.println(cf2.join().endsWith(" from applyToEither"));
     }
 
     static void acceptEitherExample() {
@@ -140,7 +140,7 @@ public class CompletableFutureExamples {
                 .acceptEither(CompletableFuture.completedFuture(original).thenApplyAsync(s -> delayedLowerCase(s)),
                         s -> result.append(s).append("acceptEither"));
         cf.join();
-        assertTrue("Result was empty", result.toString().endsWith("acceptEither"));
+        System.out.println("Result was empty"+ result.toString().endsWith("acceptEither"));
     }
 
     static void runAfterBothExample() {
@@ -149,7 +149,7 @@ public class CompletableFutureExamples {
         CompletableFuture.completedFuture(original).thenApply(String::toUpperCase).runAfterBoth(
                 CompletableFuture.completedFuture(original).thenApply(String::toLowerCase),
                 () -> result.append("done"));
-        assertTrue("Result was empty", result.length() > 0);
+        System.out.println("Result was empty"+ result.length()+" > 0");
     }
 
     static void thenAcceptBothExample() {
@@ -158,7 +158,7 @@ public class CompletableFutureExamples {
         CompletableFuture.completedFuture(original).thenApply(String::toUpperCase).thenAcceptBoth(
                 CompletableFuture.completedFuture(original).thenApply(String::toLowerCase),
                 (s1, s2) -> result.append(s1 + s2));
-        assertEquals("MESSAGEmessage", result.toString());
+        System.out.println("MESSAGEmessage"+ result.toString());
     }
 
     static void thenCombineExample() {
@@ -166,7 +166,7 @@ public class CompletableFutureExamples {
         CompletableFuture<String> cf = CompletableFuture.completedFuture(original).thenApply(s -> delayedUpperCase(s))
                 .thenCombine(CompletableFuture.completedFuture(original).thenApply(s -> delayedLowerCase(s)),
                         (s1, s2) -> s1 + s2);
-        assertEquals("MESSAGEmessage", cf.getNow(null));
+        System.out.println("MESSAGEmessage"+ cf.getNow(null));
     }
 
     static void thenCombineAsyncExample() {
@@ -175,7 +175,7 @@ public class CompletableFutureExamples {
                 .thenApplyAsync(s -> delayedUpperCase(s))
                 .thenCombine(CompletableFuture.completedFuture(original).thenApplyAsync(s -> delayedLowerCase(s)),
                         (s1, s2) -> s1 + s2);
-        assertEquals("MESSAGEmessage", cf.join());
+        System.out.println("MESSAGEmessage"+ cf.join());
     }
 
     static void thenComposeExample() {
@@ -183,7 +183,7 @@ public class CompletableFutureExamples {
         CompletableFuture<String> cf = CompletableFuture.completedFuture(original).thenApply(s -> delayedUpperCase(s))
                 .thenCompose(upper -> CompletableFuture.completedFuture(original).thenApply(s -> delayedLowerCase(s))
                         .thenApply(s -> upper + s));
-        assertEquals("MESSAGEmessage", cf.join());
+        System.out.println("MESSAGEmessage"+ cf.join());
     }
 
     static void anyOfExample() {
@@ -194,11 +194,11 @@ public class CompletableFutureExamples {
                 .collect(Collectors.toList());
         CompletableFuture.anyOf(futures.toArray(new CompletableFuture[futures.size()])).whenComplete((res, th) -> {
             if(th == null) {
-                assertTrue(isUpperCase((String) res));
+            	System.out.println(isUpperCase((String) res));
                 result.append(res);
             }
         });
-        assertTrue("Result was empty", result.length() > 0);
+        System.out.println("Result was empty"+ result.length()+" > 0");
     }
 
     static void allOfExample() {
@@ -208,10 +208,10 @@ public class CompletableFutureExamples {
                 .map(msg -> CompletableFuture.completedFuture(msg).thenApply(s -> delayedUpperCase(s)))
                 .collect(Collectors.toList());
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()])).whenComplete((v, th) -> {
-            futures.forEach(cf -> assertTrue(isUpperCase(cf.getNow(null))));
+            futures.forEach(cf -> System.out.println(isUpperCase(cf.getNow(null))));
             result.append("done");
         });
-        assertTrue("Result was empty", result.length() > 0);
+        System.out.println("Result was empty"+ result.length() +"> 0");
     }
 
     static void allOfAsyncExample() {
@@ -222,11 +222,11 @@ public class CompletableFutureExamples {
                 .collect(Collectors.toList());
         CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]))
                 .whenComplete((v, th) -> {
-                    futures.forEach(cf -> assertTrue(isUpperCase(cf.getNow(null))));
+                    futures.forEach(cf -> System.out.println(isUpperCase(cf.getNow(null))));
                     result.append("done");
                 });
         allOf.join();
-        assertTrue("Result was empty", result.length() > 0);
+        System.out.println("Result was empty"+ result.length()+" > 0");
     }
 
     private static boolean isUpperCase(String s) {
