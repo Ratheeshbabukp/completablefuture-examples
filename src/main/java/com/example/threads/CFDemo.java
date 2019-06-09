@@ -19,7 +19,7 @@ public class CFDemo {
         CompletableFuture<List<User>> userList = CompletableFuture.supplyAsync(() -> {
             return getListOfUsers();
         }).thenCompose(users-> {            
-                List<User> upperCaseList = null;
+                List<User> upperCaseList = new ArrayList<User>();
                 try {
                     upperCaseList = users.get().stream().map(
                                 user->{
@@ -47,7 +47,7 @@ public class CFDemo {
         users.add(new User("Tom", "Hanson", "th@jd.com"));
         users.add(new User("Alexander", "Scott", "as@is.com"));
         users.add(new User("Jim", "Phelps", "jp@mi.com"));
-        return CompletableFuture.completedFuture(users);
+        return CompletableFuture.supplyAsync( () -> users);
     }
 }
 
