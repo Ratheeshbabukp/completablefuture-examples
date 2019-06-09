@@ -9,10 +9,7 @@ public class RealLifeWithoutCompletableFutureExample {
 		long start = System.currentTimeMillis();
 
 		List<Car> cars = cars();
-		cars.forEach(car -> {
-			float rating = rating(car.manufacturerId);
-			car.setRating(rating);
-		});
+		cars.forEach(car -> car.setRating(rating(car.manufacturerId)));
 
 		cars.forEach(System.out::println);
 
