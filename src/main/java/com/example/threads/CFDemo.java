@@ -34,7 +34,7 @@ public class CFDemo {
             return CompletableFuture.completedFuture(upperCaseList);
         });
         
-        userList.get().forEach( e -> System.out.println(e.getFirstName()));
+        userList.get().forEach(System.out::println);
     }
     
     // Dummy method for adding List of Users
