@@ -1,3 +1,4 @@
+package com.example.threads;
 import java.util.stream.Collectors;
 import java.util.concurrent.*;
 import java.util.*;
@@ -33,7 +34,7 @@ public class CFDemo {
             return CompletableFuture.completedFuture(upperCaseList);
         });
         
-        userList.get().forEach(System.out::println);
+        userList.get().forEach( e -> System.out.println(e.getFirstName()));
     }
     
     // Dummy method for adding List of Users

@@ -1,3 +1,4 @@
+package com.example.threads;
 public class User{
   private String firstName,lastName,email;
   public User(String firstName, String lastName, String email)
