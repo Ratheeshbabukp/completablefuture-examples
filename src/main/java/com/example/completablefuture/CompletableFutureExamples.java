@@ -32,7 +32,7 @@ public class CompletableFutureExamples {
 
     public static void main(String[] args) {
         try {
-//            allOfAsyncExample();
+            allOfAsyncExample();
         } finally {
             executor.shutdown();
         }
