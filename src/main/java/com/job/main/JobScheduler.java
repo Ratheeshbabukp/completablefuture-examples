@@ -16,7 +16,7 @@ import com.job.service.UserService;
 
 public class JobScheduler   {
 
-    Logger log  = Logger.getLogger("JobScheduler.class");
+    Logger log  = Logger.getLogger("JobScheduler");
 
     private UserService userService;
 
@@ -38,7 +38,7 @@ public class JobScheduler   {
     }
 
     /**
-     * ' Get the job status and update the job.
+     *  Get the job status and update the job.
      */
     public void updateJobStatus() {
 
