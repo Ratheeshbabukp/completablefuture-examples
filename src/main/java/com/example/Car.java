@@ -1,6 +1,6 @@
-package com.example.completablefuture;
+package com.example;
 
-class Car {
+public class Car {
 	int id;
 	int manufacturerId;
 	String model;

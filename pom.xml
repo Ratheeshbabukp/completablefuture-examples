@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.manouti.examples</groupId>
+	<groupId>com.jobs.examples</groupId>
 	<artifactId>completablefuture</artifactId>
 	<version>1.0</version>
-	<description>Examples using CompletableFuture in Java 9</description>
+	<description>Examples using CompletableFuture in Java 11</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,7 +32,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>com.example.completablefuture.CompletableFutureExamples</mainClass>
+					<mainClass>com.example.CompletableFutureExamples</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

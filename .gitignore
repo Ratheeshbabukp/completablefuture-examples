@@ -18,7 +18,7 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# virtual machine crash logs..etc
 hs_err_pid*
 /pom.xml
 /target
