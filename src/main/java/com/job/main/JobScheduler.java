@@ -3,7 +3,10 @@ package com.job.main;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import java.util.List;
-
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -31,9 +34,18 @@ public class JobScheduler   {
     public void fetchJobs() {
 
         log.info("Get the Job Details for each job listings");
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+     // Callable, return a future, submit and run the task async
+        Future<Integer> futureTask1 = executor.submit(() -> {
+            System.out.println("I'm Callable task.");
+            return 1 + 1;
+        });
 
-        //TODO fetchJob body
+        try {
+        Integer result = futureTask1.get(5, TimeUnit.SECONDS);
 
+        System.out.println("Get future result : " + result);
+        }catch(Exception e) {}
         log.info("Job Details execution completed.");
     }
 
@@ -54,7 +66,7 @@ public class JobScheduler   {
 
         JobScheduler scheduler = new JobScheduler();
         scheduler.fetchJobs();
-        scheduler.updateJobStatus();
+        //scheduler.updateJobStatus();
 
     }
 

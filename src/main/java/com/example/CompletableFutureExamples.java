@@ -44,7 +44,7 @@ public class CompletableFutureExamples {
         assertEquals("message", cf.getNow(null));
     }
 
-    static void completeExceptionallyExample() {
+    static void completeExceptionallyExample() {/*
         CompletableFuture<String> cf = CompletableFuture.completedFuture("message").thenApplyAsync(String::toUpperCase,
                 CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS));
         CompletableFuture<String> exceptionHandler = cf.handle((s, th) -> { return (th != null) ? "message upon cancel" : ""; });
@@ -58,7 +58,7 @@ public class CompletableFutureExamples {
         }
 
         assertEquals("message upon cancel", exceptionHandler.join());
-    }
+    */}
 
     static void runAsyncExample() {
         CompletableFuture<Void> cf = CompletableFuture.runAsync(() -> {
@@ -115,13 +115,14 @@ public class CompletableFutureExamples {
         assertTrue("Result was empty", result.length() > 0);
     }
 
-    static void cancelExample() {
+    static void cancelExample() {/*
         CompletableFuture<String> cf = CompletableFuture.completedFuture("message").thenApplyAsync(String::toUpperCase,
                 CompletableFuture.delayedExecutor(1, TimeUnit.SECONDS));
         CompletableFuture<String> cf2 = cf.exceptionally(throwable -> "canceled message");
         assertTrue("Was not canceled", cf.cancel(true));
         assertTrue("Was not completed exceptionally", cf.isCompletedExceptionally());
         assertEquals("canceled message", cf2.join());
+        */
     }
 
     static void applyToEitherExample() {
