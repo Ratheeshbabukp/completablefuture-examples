@@ -40,10 +40,14 @@ public class JobScheduler   {
         // Callable, return a future, submit and run the task async
         Runnable fetch = new FetchJob();
         
-        CompletableFuture<Integer> futureTask1 = CompletableFuture.runAsync(fetch, executor).thenApplyAsync(s->5);  
+        CompletableFuture<Integer> futureTask1 = CompletableFuture.runAsync(fetch, executor).thenApplyAsync(s-> {
+        int k=10;
+        System.out.println("In thenAsync fn...");
+        return 18;
+        });  
 
         try {
-        Integer result = futureTask1.get(2, TimeUnit.SECONDS);
+        Integer result = futureTask1.get();//2, TimeUnit.SECONDS);
         Thread.sleep(10000);
         System.out.println("Get future result : " + result);
         }catch(Exception e) {}
