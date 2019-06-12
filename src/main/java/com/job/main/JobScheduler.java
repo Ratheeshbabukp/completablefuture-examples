@@ -43,7 +43,7 @@ public class JobScheduler   {
 
         try {
         Integer result = futureTask1.get(5, TimeUnit.SECONDS);
-
+        Thread.sleep(20000);
         System.out.println("Get future result : " + result);
         }catch(Exception e) {}
         log.info("Job Details execution completed.");
