@@ -66,18 +66,23 @@ public class JobScheduler   {
     }
     
     CompletionStage<List<String>>  sendMsg(CompletionStage<List<String>> msg) {
-    	List<String> msgss=null;
+    	//List<String> msgss=null;
+    	return msg.thenApplyAsync(ms -> {
     	try {
-    	 msgss = msg.toCompletableFuture().get();
-    	 msgss.forEach(msg1 -> {
+    	 //msgss = ms;//.toCompletableFuture().get();
+    	 ms.forEach(msg1 -> {
     		 System.out.println("Sending the message : "+msg1);
     		 try {
     		   Thread.sleep(1000);
+    		   System.out.println("Sent the message : "+msg1);
     		 }catch(Exception e) {}
     	 });
     	
     	}catch(Exception e) {}
-    	return CompletableFuture.completedFuture(msgss);
+    	
+    	return ms;
+    	});
+    	
     }
      
     CompletionStage<List<String>> notify(CompletionStage<List<String>> msg) {
