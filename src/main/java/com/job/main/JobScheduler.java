@@ -2,6 +2,7 @@ package com.job.main;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -23,29 +24,44 @@ import com.job.service.UserService;
 
 public class JobScheduler   {
 
-    Logger log  = Logger.getLogger("JobScheduler");
+    Logger log  = Logger.getLogger("JobScheduler.class");
 
     private UserService userService;
 
     // Gets all the users .
     private Supplier<List<User>> userSupplier = () -> userService.users();
 
-    CompletionStage<String>   findReceiver() {
-    	return CompletableFuture.completedFuture("myMessage");
+    CompletionStage<List<String>>   findReceiver() {
+    	
+        List<String> msg = new ArrayList<String>();
+        msg.add("1 India is my country.");
+        msg.add("2 Pak is not my country.");
+        msg.add("3 Englad is Cricket  country.");
+        msg.add("4 Brazil is football  country.");
+        msg.add("5 Afgan is terror country.");
+        msg.add("6 America is developed country.");
+    	System.out.println("Received all messages ...");
+    	return CompletableFuture.completedFuture(msg);
     }
-    CompletionStage<String>  sendMsg(CompletionStage<String> msg) {
-    	String msgss= msg.toString();
+    
+    CompletionStage<List<String>>  sendMsg(CompletionStage<List<String>> msg) {
+    	List<String> msgss=null;
+    	try {
+    	 msgss = msg.toCompletableFuture().get();
+    	 msgss.forEach(msg1 -> {
+    		 System.out.println("Sending the message : "+msg1);
+    		 try {
+    		   Thread.sleep(1000);
+    		 }catch(Exception e) {}
+    	 });
+    	
+    	}catch(Exception e) {}
     	return CompletableFuture.completedFuture(msgss);
     }
-    CompletionStage<String> returnvalue() {
-    	//String msgss= msg.toString();
-    	//return   CompletableFuture.thenCompose(  sd ->{
-    		return CompletableFuture.completedFuture("sd");
-    	//});
-    	//return "ss";
-    }
-    void notify(CompletionStage<String> msg) {
-    	
+     
+    CompletionStage<List<String>> notify(CompletionStage<List<String>> msg) {
+    	System.out.println("Notifying the message "+msg);
+    	return msg;
     }
 
     /**
@@ -54,29 +70,17 @@ public class JobScheduler   {
     public void fetchJobs() {
 
         log.info("Get the Job Details for each job listings");
-        ExecutorService executor = Executors.newFixedThreadPool(7);
-        // Callable, return a future, submit and run the task async
-       // Runnable fetch = new FetchJob();
         
-        CompletableFuture<Object> futureTask1 = 
-        		CompletableFuture.supplyAsync(this::findReceiver).thenCompose(s3-> supplyAsync(this::returnvalue));
-        
-        System.out.println("futureTask1 "+futureTask1);
-        
-       // CompletableFuture<String> futureTask2 = 
-        	//	CompletableFuture.supplyAsync(this::findReceiver).thenApply(this::sendMsg).thenCompose(cd -> this::returnValue);
-        		
-        		/*CompletableFuture.runAsync(fetch, executor).thenConsumeAsync(s-> {
-        int k=10;
-        System.out.println("In thenAsync fn...");
-        return 18;
-        });  */
-
         try {
-        Object result = futureTask1.get();//2, TimeUnit.SECONDS);
-        Thread.sleep(10000);
-        System.out.println("Get future result(object) : " + result);
-        }catch(Exception e) {}
+	        CompletableFuture<Object> futureTask1 = 
+	        		CompletableFuture.supplyAsync(this::findReceiver).thenApplyAsync(this::sendMsg).thenApply(this::notify);
+	        		
+	        Object result = futureTask1.get();//2, TimeUnit.SECONDS);
+	        Thread.sleep(10000);
+	        System.out.println("Get future result(object) : " + result);
+        }catch(Exception e) {
+        	e.printStackTrace();
+        }
         log.info("Job Details execution completed.");
     }
 
