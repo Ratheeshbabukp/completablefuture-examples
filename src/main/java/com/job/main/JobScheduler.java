@@ -4,10 +4,12 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -28,7 +30,23 @@ public class JobScheduler   {
     // Gets all the users .
     private Supplier<List<User>> userSupplier = () -> userService.users();
 
-
+    CompletionStage<String>   findReceiver() {
+    	return CompletableFuture.completedFuture("myMessage");
+    }
+    CompletionStage<String>  sendMsg(CompletionStage<String> msg) {
+    	String msgss= msg.toString();
+    	return CompletableFuture.completedFuture(msgss);
+    }
+    CompletionStage<String> returnvalue() {
+    	//String msgss= msg.toString();
+    	//return   CompletableFuture.thenCompose(  sd ->{
+    		return CompletableFuture.completedFuture("sd");
+    	//});
+    	//return "ss";
+    }
+    void notify(CompletionStage<String> msg) {
+    	
+    }
 
     /**
      * Get the Job details for Job Listings which are not processed yet.
@@ -40,14 +58,22 @@ public class JobScheduler   {
         // Callable, return a future, submit and run the task async
         Runnable fetch = new FetchJob();
         
-        CompletableFuture<Integer> futureTask1 = CompletableFuture.runAsync(fetch, executor).thenApplyAsync(s-> {
+        CompletableFuture<String> futureTask1 = 
+        		CompletableFuture.supplyAsync(this::findReceiver).thenApplyAsync((s) -> s+" : is x+1");
+        
+        System.out.println("futureTask1 "+futureTask1);
+        
+       // CompletableFuture<String> futureTask2 = 
+        	//	CompletableFuture.supplyAsync(this::findReceiver).thenApply(this::sendMsg).thenCompose(cd -> this::returnValue);
+        		
+        		/*CompletableFuture.runAsync(fetch, executor).thenConsumeAsync(s-> {
         int k=10;
         System.out.println("In thenAsync fn...");
         return 18;
-        });  
+        });  */
 
         try {
-        Integer result = futureTask1.get();//2, TimeUnit.SECONDS);
+        String result = futureTask1.get();//2, TimeUnit.SECONDS);
         Thread.sleep(10000);
         System.out.println("Get future result : " + result);
         }catch(Exception e) {}
