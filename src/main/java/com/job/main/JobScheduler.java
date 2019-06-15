@@ -34,20 +34,41 @@ public class JobScheduler   {
     CompletionStage<List<String>>   findReceiver() {
     	
         List<String> msg = new ArrayList<String>();
+        try {
+ 		  
+ 		
         msg.add("1 India is my country.");
+        System.out.println("Received messages ...1");
+        Thread.sleep(1000);
+        
         msg.add("2 Pak is not my country.");
+        System.out.println("Received messages ...2");
+        Thread.sleep(1000);
+        
         msg.add("3 Englad is Cricket  country.");
+        System.out.println("Received messages ...3");
+        Thread.sleep(1000); 
+        
         msg.add("4 Brazil is football  country.");
+        System.out.println("Received messages ...4");
+        Thread.sleep(1000);
+        
         msg.add("5 Afgan is terror country.");
+        System.out.println("Received messages ...5");
+        Thread.sleep(1000);
+        
         msg.add("6 America is developed country.");
-    	System.out.println("Received all messages ...");
+        System.out.println("Received messages ...6");
+        
+        }catch(Exception e) {}
+    	
     	return CompletableFuture.completedFuture(msg);
     }
     
     CompletionStage<List<String>>  sendMsg(CompletionStage<List<String>> msg) {
     	List<String> msgss=null;
     	try {
-    	 msgss = msg.toCompletableFuture().get();
+    	// msgss = CompletableFuture.completedFuture(msg.to);//.toCompletableFuture().get());
     	 msgss.forEach(msg1 -> {
     		 System.out.println("Sending the message : "+msg1);
     		 try {
