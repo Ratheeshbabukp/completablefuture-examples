@@ -56,10 +56,10 @@ public class JobScheduler   {
         log.info("Get the Job Details for each job listings");
         ExecutorService executor = Executors.newFixedThreadPool(7);
         // Callable, return a future, submit and run the task async
-        Runnable fetch = new FetchJob();
+       // Runnable fetch = new FetchJob();
         
-        CompletableFuture<String> futureTask1 = 
-        		CompletableFuture.supplyAsync(this::findReceiver).thenApplyAsync((s) -> s+" : is x+1");
+        CompletableFuture<Object> futureTask1 = 
+        		CompletableFuture.supplyAsync(this::findReceiver).thenCompose(s3-> supplyAsync(this::returnvalue));
         
         System.out.println("futureTask1 "+futureTask1);
         
@@ -73,9 +73,9 @@ public class JobScheduler   {
         });  */
 
         try {
-        String result = futureTask1.get();//2, TimeUnit.SECONDS);
+        Object result = futureTask1.get();//2, TimeUnit.SECONDS);
         Thread.sleep(10000);
-        System.out.println("Get future result : " + result);
+        System.out.println("Get future result(object) : " + result);
         }catch(Exception e) {}
         log.info("Job Details execution completed.");
     }
