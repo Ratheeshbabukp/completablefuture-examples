@@ -68,7 +68,7 @@ public class JobScheduler   {
     CompletionStage<List<String>>  sendMsg(CompletionStage<List<String>> msg) {
     	List<String> msgss=null;
     	try {
-    	// msgss = CompletableFuture.completedFuture(msg.to);//.toCompletableFuture().get());
+    	 msgss = msg.toCompletableFuture().get();
     	 msgss.forEach(msg1 -> {
     		 System.out.println("Sending the message : "+msg1);
     		 try {
