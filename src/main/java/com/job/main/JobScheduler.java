@@ -1,26 +1,16 @@
 package com.job.main;
 
-import static java.util.concurrent.CompletableFuture.supplyAsync;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import com.example.Car;
 import com.job.pojo.Message;
-import com.job.pojo.User;
-import com.job.process.FetchJob;
-import com.job.service.UserService;
+
 
 /**
  * Jobs executions using CompletableFuture logic.
@@ -30,12 +20,6 @@ public class JobScheduler   {
 
     Logger log  = Logger.getLogger("JobScheduler.class");
     private int sampleMessageCount = 10;
-
-    private UserService userService;
-
-    // Gets all the users
-    private Supplier<List<User>> userSupplier = () -> userService.users();
-
 
 
     CompletionStage<List<String>>   readMessage() {
