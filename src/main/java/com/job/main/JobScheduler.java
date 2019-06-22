@@ -104,21 +104,18 @@ public class JobScheduler   {
      *
      */
     String notifyMessage(List<CompletionStage<Message>> msg) {
-        try {
-
-            //CompletableFuture<List<Message>> msgList = msg.toCompletableFuture();
 
             msg.forEach(ms -> {
                 try {
-                    System.out.println("Notifying the message " + ms.toCompletableFuture().get().getContent());
-                }catch(Exception e){}
+                        ms.whenComplete((result,throwable)-> {
+                            System.out.println("Notifying the message " + result.getContent());
+                            //System.out.println("Errors if any :"+throwable);
+                        });
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             });
 
-
-
-        }catch (Exception e){
-
-        }
     	return "OK";
 
     }
